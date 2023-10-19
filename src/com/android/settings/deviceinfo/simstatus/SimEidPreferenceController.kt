@@ -64,6 +64,7 @@ class SimEidPreferenceController(context: Context, preferenceKey: String) :
         val title = getTitle()
         preference.title = title
         preference.dialogTitle = title
+        preference.setLayoutResource(R.layout.settings_preference_solo_card)
     }
 
     /** Constructs title string. */

@@ -73,6 +73,7 @@ public class DeviceNamePreferenceController extends BasePreferenceController
         mPreference.setSummary(deviceName);
         mPreference.setText(deviceName.toString());
         mPreference.setValidator(this);
+        mPreference.setLayoutResource(R.layout.settings_preference_solo_card);
     }
 
     private void initializeDeviceName() {

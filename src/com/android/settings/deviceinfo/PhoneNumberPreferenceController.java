@@ -86,6 +86,7 @@ public class PhoneNumberPreferenceController extends BasePreferenceController {
         final Preference preference = screen.findPreference(getPreferenceKey());
         final PreferenceCategory category = screen.findPreference(KEY_PREFERENCE_CATEGORY);
         mPreferenceList.add(preference);
+        preference.setLayoutResource(R.layout.settings_preference_solo_card);
 
         final int phonePreferenceOrder = preference.getOrder();
         // Add additional preferences for each sim in the device
@@ -95,6 +96,7 @@ public class PhoneNumberPreferenceController extends BasePreferenceController {
             multiSimPreference.setCopyingEnabled(true);
             multiSimPreference.setOrder(phonePreferenceOrder + simSlotNumber);
             multiSimPreference.setKey(KEY_PHONE_NUMBER + simSlotNumber);
+            multiSimPreference.setLayoutResource(R.layout.settings_preference_solo_card);
             category.addPreference(multiSimPreference);
             mPreferenceList.add(multiSimPreference);
         }

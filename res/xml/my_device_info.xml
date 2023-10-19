@@ -19,14 +19,47 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:settings="http://schemas.android.com/apk/res-auto"
     android:key="my_device_info_pref_screen"
-    android:title="@string/about_settings">
+    android:title="@string/about_rising_device">
 
-    <com.android.settingslib.widget.LayoutPreference
-        android:key="my_device_info_header"
-        android:order="0"
-        android:layout="@layout/settings_entity_header"
+    <PreferenceCategory
         android:selectable="false"
-        settings:isPreferenceVisible="false"/>
+        android:title="@string/device_header_info_category_title">
+
+        <com.android.settingslib.widget.LayoutPreference
+            android:key="my_device_info_header"
+            android:order="-999"
+            android:layout="@layout/about_device_info"
+            android:selectable="false"
+            settings:isPreferenceVisible="true"/>
+
+    </PreferenceCategory>
+    
+    <PreferenceCategory
+        android:selectable="false"
+        android:title="@string/device_info_hw_sw_more">
+
+        <com.android.settingslib.widget.LayoutPreference
+            android:key="my_device_hw_header"
+            android:order="-998"
+            android:layout="@layout/about_device_info_hw"
+            android:selectable="false"
+            settings:isPreferenceVisible="true"/>
+            
+        <com.android.settingslib.widget.LayoutPreference
+            android:key="my_device_sw_header"
+            android:order="-997"
+            android:layout="@layout/about_device_info_sw"
+            android:selectable="false"
+            settings:isPreferenceVisible="true"/>
+
+        <com.android.settingslib.widget.LayoutPreference
+            android:key="my_device_sw2_header"
+            android:order="-996"
+            android:layout="@layout/about_device_info_sw2"
+            android:selectable="false"
+            settings:isPreferenceVisible="true"/>
+
+    </PreferenceCategory>
 
     <PreferenceCategory
         android:key="basic_info_category"
@@ -66,24 +99,27 @@
         android:title="@string/my_device_info_legal_category_title">
 
         <!-- Legal information -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="legal_container"
             android:order="15"
             android:title="@string/legal_information"
+            settings:position="solo"
             android:fragment="com.android.settings.LegalSettings"/>
 
         <!-- Regulatory labels -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="regulatory_info"
             android:order="16"
+            settings:position="solo"
             android:title="@string/regulatory_labels">
             <intent android:action="android.settings.SHOW_REGULATORY_INFO"/>
-        </Preference>
+        </com.android.settings.preferences.ui.AdaptivePreference>
 
         <!-- Safety & regulatory manual -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="safety_info"
             android:order="17"
+            settings:position="solo"
             android:title="@string/safety_and_regulatory_info"/>
     </PreferenceCategory>
 
@@ -93,9 +129,10 @@
         android:title="@string/my_device_info_device_details_category_title">
 
         <!-- SIM status -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="sim_status"
             android:order="18"
+            settings:position="solo"
             android:title="@string/sim_status_title"
             settings:keywords="@string/keywords_sim_status"
             android:summary="@string/summary_placeholder"
@@ -103,9 +140,10 @@
             settings:controller="com.android.settings.deviceinfo.simstatus.SimStatusPreferenceController"/>
 
         <!-- Model & hardware -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="device_model"
             android:order="30"
+            settings:position="solo"
             android:title="@string/model_info"
             android:summary="@string/summary_placeholder"
             android:fragment="com.android.settings.deviceinfo.hardwareinfo.HardwareInfoFragment"
@@ -137,88 +175,69 @@
             settings:controller="com.android.settings.deviceinfo.imei.ImeiInfoPreferenceController"/>
 
         <!-- Android version -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="firmware_version"
             android:order="42"
+            settings:position="solo"
             android:title="@string/firmware_version"
             android:summary="@string/summary_placeholder"
             android:fragment="com.android.settings.deviceinfo.firmwareversion.FirmwareVersionSettings"
+            settings:isPreferenceVisible="false"
             settings:controller="com.android.settings.deviceinfo.firmwareversion.FirmwareVersionPreferenceController"/>
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/my_device_info_device_identifiers_category_title">
 
-        <!--IP address -->
-        <Preference
-            android:key="wifi_ip_address"
-            android:order="44"
-            android:title="@string/wifi_ip_address"
-            android:summary="@string/summary_placeholder"
-            android:selectable="false"
-            settings:enableCopying="true"/>
-
         <!-- Wi-Fi MAC address -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="saved_accesspoints_wifi_mac_address"
             android:order="45"
+            settings:position="solo"
             android:title="@string/status_wifi_mac_address"
             android:summary="@string/view_saved_network"
             android:fragment="com.android.settings.wifi.savedaccesspoints2.SavedAccessPointsWifiSettings2"
             settings:enableCopying="false"/>
 
-        <!-- Factory Wi-Fi MAC address -->
-        <Preference
-            android:key="wifi_mac_address"
-            android:order="46"
-            android:title="@string/status_device_wifi_mac_address"
-            android:summary="@string/summary_placeholder"
-            android:selectable="false"
-            settings:enableCopying="true"/>
-
-        <!-- Bluetooth address -->
-        <Preference
-            android:key="bt_address"
-            android:order="47"
-            android:title="@string/status_bt_address"
-            android:summary="@string/summary_placeholder"
-            android:selectable="false"
-            settings:enableCopying="true"/>
-
         <!-- Device up time -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="up_time"
             android:order="48"
+            settings:position="solo"
             android:title="@string/status_up_time"
             android:summary="@string/summary_placeholder"
             android:selectable="false"/>
 
         <!-- Manual -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="manual"
             android:order="50"
+            settings:position="solo"
             android:title="@string/manual">
             <intent android:action="android.settings.SHOW_MANUAL"/>
-        </Preference>
+        </com.android.settings.preferences.ui.AdaptivePreference>
 
         <!-- Feedback on the device -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="device_feedback"
             android:order="51"
+            settings:position="solo"
             android:title="@string/device_feedback"
             settings:keywords="@string/keywords_device_feedback"/>
 
         <!-- Device FCC equipment id -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="fcc_equipment_id"
             android:order="52"
+            settings:position="solo"
             android:title="@string/fcc_equipment_id"
             android:summary="@string/summary_placeholder"/>
 
         <!-- Build number -->
-        <Preference
+        <com.android.settings.preferences.ui.AdaptivePreference
             android:key="build_number"
             android:order="53"
+            settings:position="solo"
             android:title="@string/build_number"
             android:summary="@string/summary_placeholder"
             settings:enableCopying="true"

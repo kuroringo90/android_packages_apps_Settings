@@ -64,6 +64,7 @@ public class BrandedAccountPreferenceController extends BasePreferenceController
         }
 
         accountPreference.setSummary(mAccounts[0].name);
+        accountPreference.setLayoutResource(R.layout.settings_preference_solo_card);
     }
 
     @Override
