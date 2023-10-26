@@ -18,6 +18,7 @@ package com.android.settings.preferences;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import androidx.preference.ListPreference;
@@ -35,54 +36,53 @@ public class SystemListPreference extends ListPreference {
     private static final String GLOBAL = "global";
     private static final String NONE = "none";
 
+    private Context mContext;
+    private AttributeSet mAttrs;
+
     public SystemListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-
+        mContext = context;
+        mAttrs = attrs;
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SystemPreference);
         String restartLevel = typedArray.getString(R.styleable.SystemPreference_restart_level);
         if (restartLevel == null || restartLevel.isEmpty()) {
             restartLevel = "none";
         }
-        String settingsType = typedArray.getString(R.styleable.SystemPreference_settings_type);
-        if (settingsType == null || settingsType.isEmpty()) {
-            settingsType = "system";
-        }
-        final String settingsKey = settingsType;
+        typedArray.recycle();
+        final String settingsKey = getSettingsType();
         final String restartKey = restartLevel;
         CharSequence[] entries = getEntries();
         CharSequence[] entryValues = getEntryValues();
-        String currentValue;
+        int settingsValue;
         switch (settingsKey) {
             case SYSTEM:
             default:
-                currentValue = String.valueOf(Settings.System.getInt(context.getContentResolver(), getKey(), 0));
+                settingsValue = Settings.System.getIntForUser(context.getContentResolver(), getKey(), 0, UserHandle.USER_CURRENT);
                 break;
             case SECURE:
-                currentValue = String.valueOf(Settings.Secure.getInt(context.getContentResolver(), getKey(), 0));
+                settingsValue = Settings.Secure.getIntForUser(context.getContentResolver(), getKey(), 0, UserHandle.USER_CURRENT);
                 break;
             case GLOBAL:
-                currentValue = String.valueOf(Settings.Global.getInt(context.getContentResolver(), getKey(), 0));
+                settingsValue = Settings.Global.getInt(context.getContentResolver(), getKey(), 0);
                 break;
         }
-        int index = Arrays.asList(entryValues).indexOf(currentValue);
-        String currentEntry = (index != -1) ? entries[index].toString() : "";
-        setValue(currentValue);
+        String currentEntry = entries[settingsValue].toString();
+        setValue(currentEntry);
         setSummary(currentEntry);
         setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 int value = Integer.parseInt((String) newValue);
-
-                int selectedIndex = Arrays.asList(entryValues).indexOf(String.valueOf(value));
-                String selectedEntry = (selectedIndex != -1) ? entries[selectedIndex].toString() : "";
+                String selectedEntry = entries[value].toString();
+                setValue(selectedEntry);
                 setSummary(selectedEntry);
                 switch (settingsKey) {
                     case SYSTEM:
                     default:
-                        Settings.System.putInt(context.getContentResolver(), getKey(), value);
+                        Settings.System.putIntForUser(context.getContentResolver(), getKey(), value, UserHandle.USER_CURRENT);
                         break;
                     case SECURE:
-                        Settings.Secure.putInt(context.getContentResolver(), getKey(), value);
+                        Settings.Secure.putIntForUser(context.getContentResolver(), getKey(), value, UserHandle.USER_CURRENT);
                         break;
                     case GLOBAL:
                         Settings.Global.putInt(context.getContentResolver(), getKey(), value);
@@ -102,9 +102,44 @@ public class SystemListPreference extends ListPreference {
                     default:
                         break;
                 }
-
                 return true;
             }
         });
+    }
+    
+    @Override
+    protected void onSetInitialValue(Object defaultValue) {
+        super.onSetInitialValue(defaultValue);
+        CharSequence[] entries = getEntries();
+        CharSequence[] entryValues = getEntryValues();
+        int value;
+        switch (getSettingsType()) {
+            case SYSTEM:
+            default:
+                value = Settings.System.getIntForUser(getContext().getContentResolver(), getKey(), 0, UserHandle.USER_CURRENT);
+                break;
+            case SECURE:
+                value = Settings.Secure.getIntForUser(getContext().getContentResolver(), getKey(), 0, UserHandle.USER_CURRENT);
+                break;
+            case GLOBAL:
+                value = Settings.Global.getInt(getContext().getContentResolver(), getKey(), 0);
+                break;
+        }
+        String currentEntry = entries[value].toString();
+        setValue(currentEntry);
+        setSummary(currentEntry);
+        setValueIndex(value);
+        setEntries(entries);
+        setEntryValues(entryValues);
+    }
+
+    private String getSettingsType() {
+        TypedArray typedArray = getContext().obtainStyledAttributes(mAttrs, R.styleable.SystemPreference);
+        String settingsType = typedArray.getString(R.styleable.SystemPreference_settings_type);
+        if (settingsType == null || settingsType.isEmpty()) {
+            settingsType = "system";
+        }
+        typedArray.recycle();
+        return settingsType;
     }
 }
