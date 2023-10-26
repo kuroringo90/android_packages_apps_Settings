@@ -18,18 +18,16 @@ package com.android.settings.preferences.ui;
 import android.content.Context;
 import android.content.res.TypedArray;
 import androidx.preference.Preference;
+import androidx.preference.DropDownPreference;
 import android.util.AttributeSet;
+
 import com.android.settings.R;
+import com.android.settings.preferences.ui.AdaptivePreferenceUtils;
 
-import com.android.settings.network.SubscriptionUtil;
+public class AdaptiveDropDownPreference extends DropDownPreference {
 
-public class AdaptivePreference extends Preference {
-
-    public AdaptivePreference(Context context, AttributeSet attrs) {
+    public AdaptiveDropDownPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        if ("device_model".equals(getKey()) && !SubscriptionUtil.isSimHardwareVisible(context)) {
-            setLayoutResource(R.layout.top_level_preference_top_card);
-        }
         setLayoutResource(AdaptivePreferenceUtils.getLayoutResourceId(context, attrs));
     }
 }

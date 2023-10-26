@@ -77,4 +77,7 @@
     <string name="device_header_info_category_title">Build type</string>
     <string name="device_info_hw_sw_more">More</string>
     <string name="device_info_security_patch">Security update</string>
+    <string name="category_name_network">Network and Connectivity settings</string>
+    <string name="category_name_sounds">General sound and notification settings</string>
+    <string name="category_name_sounds_others">Other sound settings</string>
 </resources>

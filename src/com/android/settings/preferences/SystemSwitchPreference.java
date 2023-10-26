@@ -32,6 +32,7 @@ import androidx.preference.PreferenceViewHolder;
 import com.android.internal.util.rising.systemUtils;
 
 import com.android.settings.R;
+import com.android.settings.preferences.ui.AdaptivePreferenceUtils;
 
 public class SystemSwitchPreference extends SwitchPreference {
 
@@ -50,6 +51,7 @@ public class SystemSwitchPreference extends SwitchPreference {
         super(context, attrs);
         mContext = context;
         mAttrs = attrs;
+        initLayout(context, attrs);
     }
     
     @Override
@@ -57,7 +59,12 @@ public class SystemSwitchPreference extends SwitchPreference {
         super.onBindViewHolder(view);
         init();
     }
-    
+
+    private void initLayout(Context context, AttributeSet attrs) {
+        int layoutResId = AdaptivePreferenceUtils.getLayoutResourceId(context, attrs);
+        setLayoutResource(layoutResId);
+    }
+
     private void init() {
         TypedArray typedArray = mContext.obtainStyledAttributes(mAttrs, R.styleable.SystemPreference);
         String restartLevel = typedArray.getString(R.styleable.SystemPreference_restart_level);

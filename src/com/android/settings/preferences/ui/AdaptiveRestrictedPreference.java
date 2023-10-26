@@ -16,21 +16,24 @@
 package com.android.settings.preferences.ui;
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import androidx.preference.Preference;
+import android.os.Process;
+import android.os.UserHandle;
 import android.util.AttributeSet;
+import android.content.res.TypedArray;
+import androidx.core.content.res.TypedArrayUtils;
+import androidx.preference.PreferenceManager;
+import androidx.preference.PreferenceViewHolder;
+import android.view.View;
+
 import com.android.settings.R;
+import com.android.settings.preferences.ui.AdaptivePreferenceUtils;
 
-import com.android.settings.network.SubscriptionUtil;
+import com.android.settingslib.RestrictedPreference;
 
-public class AdaptivePreference extends Preference {
+public class AdaptiveRestrictedPreference extends RestrictedPreference {
 
-    public AdaptivePreference(Context context, AttributeSet attrs) {
+    public AdaptiveRestrictedPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        if ("device_model".equals(getKey()) && !SubscriptionUtil.isSimHardwareVisible(context)) {
-            setLayoutResource(R.layout.top_level_preference_top_card);
-        }
         setLayoutResource(AdaptivePreferenceUtils.getLayoutResourceId(context, attrs));
     }
 }
-

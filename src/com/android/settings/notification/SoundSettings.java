@@ -32,6 +32,8 @@ import android.text.TextUtils;
 import androidx.annotation.VisibleForTesting;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceGroup;
 
 import com.android.settings.R;
 import com.android.settings.RingtonePreference;
@@ -45,6 +47,8 @@ import com.android.settingslib.core.instrumentation.Instrumentable;
 import com.android.settingslib.core.lifecycle.Lifecycle;
 import com.android.settingslib.search.SearchIndexable;
 import com.android.settingslib.widget.UpdatableListPreferenceDialogFragment;
+
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -111,6 +115,51 @@ public class SoundSettings extends DashboardFragment implements OnActivityResult
         if (phoneRingTonePreference != null && openPhoneRingtonePicker) {
             onPreferenceTreeClick(phoneRingTonePreference);
         }
+        setupExtraPreferences();
+    }
+
+    private void setupExtraPreferences() {
+        final PreferenceCategory generalSoundCategory = findPreference("sound_settings_general");
+        final PreferenceGroup screen = getPreferenceScreen();
+        if (screen == null) return;
+        final List<Preference> allPreferences = getAllPreferences(screen);
+        for (Preference preference : allPreferences) {
+            if (preference.getKey() != null) {
+                boolean isAmbMusicPreference = preference.getKey().equals("dashboard_tile_pref_com.google.intelligence.sense.ambientmusic.AmbientMusicSettingsActivity");
+                boolean isCaptionPreference = preference.getKey().equals("dashboard_tile_pref_com.google.android.apps.miphone.aiai.captions.settingsui.settingsactivity.CaptionsSettingsActivity");
+                boolean isAdAudioPreference = preference.getKey().equals("dashboard_tile_pref_com.google.android.apps.miphone.aiai.adaptiveaudio.settings.ui.AdaptiveAudioSettingsActivity");
+                boolean isDirac = preference.getKey().contains("dirac");
+                boolean isDolby = preference.getKey().contains("dolby");
+                if (isAmbMusicPreference || isCaptionPreference || isAdAudioPreference || isDirac || isDolby) {
+                    preference.setLayoutResource(R.layout.top_level_preference_middle_card);
+                    getPreferenceScreen().removePreference(preference);
+                    generalSoundCategory.addPreference(preference);
+                }
+                if (isAmbMusicPreference) {
+                    preference.setOrder(-106);
+                } else if (isCaptionPreference) {
+                    preference.setOrder(-105);
+                } else if (isAdAudioPreference) {
+                    preference.setOrder(-104);
+                } else if (isDirac) {
+                    preference.setOrder(-103);
+                } else if (isDolby) {
+                    preference.setOrder(-102);
+                }
+            }
+        }
+    }
+
+    private List<Preference> getAllPreferences(PreferenceGroup preferenceGroup) {
+        List<Preference> preferences = new ArrayList<>();
+        for (int i = 0; i < preferenceGroup.getPreferenceCount(); i++) {
+            Preference preference = preferenceGroup.getPreference(i);
+            preferences.add(preference);
+            if (preference instanceof PreferenceGroup) {
+                preferences.addAll(getAllPreferences((PreferenceGroup) preference));
+            }
+        }
+        return preferences;
     }
 
     @Override
@@ -126,6 +175,7 @@ public class SoundSettings extends DashboardFragment implements OnActivityResult
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
+        Log.d("onPreferenceTreeClick", "Preference Key: " + preference.getKey());
         if (preference instanceof RingtonePreference) {
             writePreferenceClickMetric(preference);
             mRequestPreference = (RingtonePreference) preference;

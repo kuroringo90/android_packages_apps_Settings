@@ -86,7 +86,6 @@ public class PhoneNumberPreferenceController extends BasePreferenceController {
         final Preference preference = screen.findPreference(getPreferenceKey());
         final PreferenceCategory category = screen.findPreference(KEY_PREFERENCE_CATEGORY);
         mPreferenceList.add(preference);
-        preference.setLayoutResource(R.layout.settings_preference_solo_card);
 
         final int phonePreferenceOrder = preference.getOrder();
         // Add additional preferences for each sim in the device
@@ -96,7 +95,6 @@ public class PhoneNumberPreferenceController extends BasePreferenceController {
             multiSimPreference.setCopyingEnabled(true);
             multiSimPreference.setOrder(phonePreferenceOrder + simSlotNumber);
             multiSimPreference.setKey(KEY_PHONE_NUMBER + simSlotNumber);
-            multiSimPreference.setLayoutResource(R.layout.settings_preference_solo_card);
             category.addPreference(multiSimPreference);
             mPreferenceList.add(multiSimPreference);
         }
@@ -108,6 +106,16 @@ public class PhoneNumberPreferenceController extends BasePreferenceController {
             final Preference simStatusPreference = mPreferenceList.get(simSlotNumber);
             simStatusPreference.setTitle(getPreferenceTitle(simSlotNumber));
             simStatusPreference.setSummary(getSummary());
+            simStatusPreference.setIcon(R.drawable.ic_numbers);
+            if (mTelephonyManager.getPhoneCount() < 2) {
+                simStatusPreference.setLayoutResource(R.layout.top_level_preference_bottom_card);
+            } else {
+                if (simSlotNumber == 0) {
+                    simStatusPreference.setLayoutResource(R.layout.top_level_preference_middle_card);
+                } else {
+                    simStatusPreference.setLayoutResource(R.layout.top_level_preference_bottom_card);
+                }
+            }
         }
     }
 

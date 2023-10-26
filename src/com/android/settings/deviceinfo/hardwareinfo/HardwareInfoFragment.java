@@ -26,6 +26,7 @@ import com.android.settingslib.core.AbstractPreferenceController;
 import com.android.settingslib.core.lifecycle.Lifecycle;
 import com.android.settingslib.search.SearchIndexable;
 
+import com.android.settings.deviceinfo.BluetoothAddressPreferenceController;
 import com.android.settings.deviceinfo.IpAddressPreferenceController;
 
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ public class HardwareInfoFragment extends DashboardFragment {
         final List<AbstractPreferenceController> controllers = new ArrayList<>();
 
         controllers.add(new IpAddressPreferenceController(context, lifecycle));
+        controllers.add(new BluetoothAddressPreferenceController(context, lifecycle));
         return controllers;
     }
 

@@ -32,6 +32,7 @@ import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settingslib.search.SearchIndexable;
 
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 @SearchIndexable
@@ -52,6 +53,42 @@ public class SystemDashboardFragment extends DashboardFragment {
         }
 
         showRestrictionDialog();
+        setUpPreferences();
+    }
+
+    private void setUpPreferences() {
+        List<Preference> allPreferences = getAllPreferences(getPreferenceScreen());
+        int minOrder = Integer.MAX_VALUE;
+        int maxOrder = Integer.MIN_VALUE;
+        for (Preference preference : allPreferences) {
+            if (preference.getOrder() < minOrder) {
+                minOrder = preference.getOrder();
+            }
+            if (preference.getOrder() > maxOrder) {
+                maxOrder = preference.getOrder();
+            }
+        }
+        for (Preference preference : allPreferences) {
+            if (preference.getOrder() == minOrder) {
+                preference.setLayoutResource(R.layout.top_level_preference_top_card);
+            } else if (preference.getOrder() == maxOrder) {
+                preference.setLayoutResource(R.layout.top_level_preference_bottom_card);
+            } else {
+                preference.setLayoutResource(R.layout.top_level_preference_middle_card);
+            }
+        }
+    }
+
+    private List<Preference> getAllPreferences(PreferenceGroup preferenceGroup) {
+        List<Preference> preferences = new ArrayList<>();
+        for (int i = 0; i < preferenceGroup.getPreferenceCount(); i++) {
+            Preference preference = preferenceGroup.getPreference(i);
+            preferences.add(preference);
+            if (preference instanceof PreferenceGroup) {
+                preferences.addAll(getAllPreferences((PreferenceGroup) preference));
+            }
+        }
+        return preferences;
     }
 
     @VisibleForTesting

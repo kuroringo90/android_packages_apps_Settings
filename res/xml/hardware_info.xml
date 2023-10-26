@@ -22,7 +22,7 @@
     settings:keywords="@string/keywords_model_and_hardware">
 
     <!-- Bluetooth address -->
-    <com.android.settings.preferences.ui.AdaptivePreference
+    <Preference
         android:key="bt_address"
         settings:position="solo"
         android:title="@string/status_bt_address"
@@ -31,7 +31,7 @@
         settings:enableCopying="true"/>
 
     <!-- Factory Wi-Fi MAC address -->
-    <com.android.settings.preferences.ui.AdaptivePreference
+    <Preference
         android:key="wifi_mac_address"
         settings:position="solo"
         android:title="@string/status_device_wifi_mac_address"
