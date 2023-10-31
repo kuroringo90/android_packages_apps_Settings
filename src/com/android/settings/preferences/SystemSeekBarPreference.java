@@ -33,6 +33,7 @@ import com.android.internal.util.rising.systemUtils;
 import com.android.settings.R;
 
 import com.android.settings.widget.SeekBarPreference;
+import com.android.settings.preferences.ui.AdaptivePreferenceUtils;
 
 public class SystemSeekBarPreference extends SeekBarPreference {
 
@@ -53,13 +54,14 @@ public class SystemSeekBarPreference extends SeekBarPreference {
                 android.R.attr.preferenceStyle));
         mContext = context;
         mAttrs = attrs;
-        setLayoutResource(R.layout.preference_system_seekbar);
+        setLayoutResource(AdaptivePreferenceUtils.getLayoutResourceId(context, attrs));
     }
     
     @Override
     public void onBindViewHolder(PreferenceViewHolder view) {
         super.onBindViewHolder(view);
         mSeekBar = (SeekBar) view.findViewById(com.android.internal.R.id.seekbar);
+        mSeekBar.setVisibility(View.VISIBLE);
         init();
     }
 

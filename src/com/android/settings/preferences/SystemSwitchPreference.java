@@ -51,18 +51,13 @@ public class SystemSwitchPreference extends SwitchPreference {
         super(context, attrs);
         mContext = context;
         mAttrs = attrs;
-        initLayout(context, attrs);
+        setLayoutResource(AdaptivePreferenceUtils.getLayoutResourceId(context, attrs));
     }
     
     @Override
     public void onBindViewHolder(PreferenceViewHolder view) {
         super.onBindViewHolder(view);
         init();
-    }
-
-    private void initLayout(Context context, AttributeSet attrs) {
-        int layoutResId = AdaptivePreferenceUtils.getLayoutResourceId(context, attrs);
-        setLayoutResource(layoutResId);
     }
 
     private void init() {

@@ -27,6 +27,8 @@ import com.android.internal.util.rising.systemUtils;
 import com.android.settings.R;
 import java.util.Arrays;
 
+import com.android.settings.preferences.ui.AdaptivePreferenceUtils;
+
 public class SystemListPreference extends ListPreference {
 
     private static final String SYSTEMUI_RESTART = "systemui";
@@ -43,6 +45,7 @@ public class SystemListPreference extends ListPreference {
         super(context, attrs);
         mContext = context;
         mAttrs = attrs;
+        setLayoutResource(AdaptivePreferenceUtils.getLayoutResourceId(context, attrs));
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SystemPreference);
         String restartLevel = typedArray.getString(R.styleable.SystemPreference_restart_level);
         if (restartLevel == null || restartLevel.isEmpty()) {
