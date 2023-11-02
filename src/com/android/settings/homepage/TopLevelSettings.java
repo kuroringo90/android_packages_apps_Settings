@@ -308,9 +308,6 @@ public class TopLevelSettings extends DashboardFragment implements SplitLayoutLi
                     /* scrollNeeded= */ false);
         }
         super.onStart();
-        chargingText = getContext().getResources().getString(R.string.homepage_widget_battery_charge);
-        dischargingText = getContext().getResources().getString(R.string.homepage_widget_battery_discharge);
-        initHomepageWidgetsView();
     }
 
     private boolean isOnlyOneActivityInTask() {
@@ -336,17 +333,19 @@ public class TopLevelSettings extends DashboardFragment implements SplitLayoutLi
             if (icon != null) {
                 icon.setTint(tintColor);
             }
-            setUpPreferenceLayout(preference);
+            String preferenceKey = preference.getKey();
+            if (preferenceKey != null && !("top_level_homepage_widgets".equals(preferenceKey) ||
+                                           "top_level_homepage_banner_view".equals(preferenceKey))) {
+                setUpPreferenceLayout(preference);
+            }
         });
+        chargingText = getContext().getResources().getString(R.string.homepage_widget_battery_charge);
+        dischargingText = getContext().getResources().getString(R.string.homepage_widget_battery_discharge);
+        initHomepageWidgetsView();
     }
 
     private void setUpPreferenceLayout(Preference preference) {
         String key = preference.getKey();
-
-        if ("top_level_homepage_widgets".equals(key)
-            || "top_level_homepage_banner_view".equals(key)) {
-            return;
-        }
 
         //Log.d("PreferenceLogging", "Setting up layout for preference key: " + key);
 
